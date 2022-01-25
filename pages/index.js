@@ -1,16 +1,22 @@
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
+import { useState } from "react";
 import styles from "../styles/Home.module.css";
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  const username = "moraesrayanne";
+  const [username, setUsername] = useState('');
+  const router = useRouter();
 
   return (
     <>
       <Box className={styles.firstBox}>
         <Box className={styles.secondBox}>
           {/* Formulário */}
-          <Box as="form" className={styles.form}>
-            <h1 className={styles.title}>Boas vindas de volta!</h1>
+          <Box as="form" onSubmit={(e) => { 
+            e.preventDefault();
+            router.push("/chat")
+          }} className={styles.form}>
+            <h1 className={styles.title}>Bem vinde de volta!</h1>
 
             <Text variant="body3" className={styles.text}>
               Aluracord - {username}
@@ -26,6 +32,8 @@ export default function Home() {
                   backgroundColor: "#181F25",
                 },
               }}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <Button
               type="submit"
