@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 export default function Home() {
   const [username, setUsername] = useState('');
   const router = useRouter();
+  const blank = ''
 
   return (
     <>
@@ -19,11 +20,12 @@ export default function Home() {
             <h1 className={styles.title}>Bem vinde de volta!</h1>
 
             <Text variant="body3" className={styles.text}>
-              Aluracord - {username}
+              Aluracord - {username.length > 2 ? username : ""}
             </Text>
 
             <TextField
               fullWidth
+              placeholder="Insira o seu usuário no github"
               textFieldColors={{
                 neutral: {
                   textColor: "#CBD2D9",
@@ -53,10 +55,13 @@ export default function Home() {
           <Box className={styles.photoArea}>
             <Image
               className={styles.image}
-              src={`https://github.com/${username}.png`}
+              src={username.length > 2
+                ? `https://github.com/${username}.png`
+                : blank
+            }
             />
             <Text variant="body4" className={styles.username}>
-              {username}
+            {username.length > 2 ? username : ""}
             </Text>
           </Box>
           {/* Photo Area */}
