@@ -20,6 +20,14 @@
     max-width: 95%;
     max-height: 95vh;
     padding: 32px;
+    animation: fadeIn 0.5s linear;
+}
+
+@keyframes fadeIn {
+    from{ opacity: 0;
+    }
+    to{ opacity: 1; 
+    }
 }
 
 .thirdBox {
@@ -50,7 +58,7 @@
 }
 
 .messageBox {
-    /* overflow: scroll; */
+    overflow: scroll;
     display: flex;
     flex-direction: column-reverse;
     flex: 1;
