@@ -2,21 +2,44 @@ import { Box, Text, TextField, Image, Button } from "@skynexui/components";
 import React from "react";
 import styles from "../styles/Chat.module.css";
 import Header from "../components/Header";
+import { createClient } from "@supabase/supabase-js";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzY1Nzk3OSwiZXhwIjoxOTU5MjMzOTc5fQ.GfaAxP5NGog4Na1NoMVA_RYVcRdRShvGcRtcBMQzU9Y";
+const SUPABASE_URL = "https://tanjffvyzabmpnmyjisj.supabase.co";
+
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
+  useEffect(() => {
+    const supabaseData = supabaseClient
+      .from("messages")
+      .select("*")
+      .order('id', { ascending: false })
+      .then(({ data }) => {
+        setMessageList(data);
+      });
+  }, []);
+
   function handleNewMessage(newMessage) {
     const message = {
-      id: messageList.length + 1,
+      // id: messageList.length + 1,
       de: "moraesrayanne",
       texto: newMessage,
     };
 
-    setMessageList([message, ...messageList]);
+    supabaseClient
+      .from("messages")
+      .insert([message])
+      .then(({ data }) => {
+        setMessageList([data[0], ...messageList]);
+      });
+
     setMessage("");
   }
 
@@ -61,26 +84,25 @@ export default function ChatPage() {
 
 function MessageList({ message }) {
   return (
-    <Box 
-      tag="ul" 
-      className={styles.messageBox}
-    >
+    <Box tag="ul" className={styles.messageBox}>
       {message.map((mensagem) => {
         return (
-          <Text 
-            key={mensagem.id} 
-            tag="li" 
-            className={styles.text
-          }>
+          <Text key={mensagem.id} tag="li" className={styles.text}>
             <Box className={styles.boxContent}>
               <Image
                 className={styles.img}
-                src={`https://github.com/moraesrayanne.png`}
+                src={`https://github.com/${mensagem.de}.png`}
               />
-              
+
               <Text tag="strong">{mensagem.de}</Text>
-              
-              <Text className={styles.date} tag="span">
+
+              <Text
+                className={styles.date}
+                tag="span"
+                styleSheet={{
+                  fontSize: "12px",
+                }}
+              >
                 {new Date().toLocaleDateString()}
               </Text>
             </Box>
