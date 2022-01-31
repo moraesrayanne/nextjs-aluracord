@@ -6,15 +6,14 @@ import { createClient } from "@supabase/supabase-js";
 
 import { useState, useEffect } from "react";
 
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzY1Nzk3OSwiZXhwIjoxOTU5MjMzOTc5fQ.GfaAxP5NGog4Na1NoMVA_RYVcRdRShvGcRtcBMQzU9Y";
-const SUPABASE_URL = "https://tanjffvyzabmpnmyjisj.supabase.co";
-
-const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+
+  const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   useEffect(() => {
     const supabaseData = supabaseClient
@@ -22,6 +21,7 @@ export default function ChatPage() {
       .select("*")
       .order('id', { ascending: false })
       .then(({ data }) => {
+        console.log(supabaseData)
         setMessageList(data);
       });
   }, []);
